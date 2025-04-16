@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminNav from '@/components/adminNav';
 import Link from 'next/link';
-import { Pencil, Trash2, PlusCircle, Images, Image } from 'lucide-react';
+import { Pencil, Trash2, PlusCircle, Images, Image, Upload } from 'lucide-react';
 
 interface Album {
   id: number;
@@ -135,12 +135,14 @@ export default function AlbumsPage() {
               <h1 className="text-3xl font-bold text-gray-900">相冊管理</h1>
               <p className="mt-2 text-gray-600">創建和管理相冊，上傳和整理圖片。</p>
             </div>
-            <Link href="/admin/albums/new">
-              <div className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                <PlusCircle className="w-4 h-4 mr-2" />
-                創建新相冊
-              </div>
-            </Link>
+            <div className="flex space-x-3">
+              <Link href="/admin/albums/new/upload">
+                <div className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                  <Upload className="w-4 h-4 mr-2" />
+                  快速創建並上傳
+                </div>
+              </Link>
+            </div>
           </div>
           
           {/* 筛选选项 */}
@@ -185,12 +187,20 @@ export default function AlbumsPage() {
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">沒有相冊</h3>
               <p className="text-gray-600 mb-6">還沒有創建任何相冊，點擊下方按鈕創建第一個相冊。</p>
-              <Link href="/admin/albums/new">
-                <div className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                  <PlusCircle className="w-4 h-4 mr-2" />
-                  創建新相冊
-                </div>
-              </Link>
+              <div className="flex justify-center space-x-4">
+                <Link href="/admin/albums/new/upload">
+                  <div className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                    <Upload className="w-4 h-4 mr-2" />
+                    快速創建並上傳
+                  </div>
+                </Link>
+                <Link href="/admin/albums/new">
+                  <div className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    <PlusCircle className="w-4 h-4 mr-2" />
+                    創建新相冊
+                  </div>
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -252,29 +262,41 @@ export default function AlbumsPage() {
       
       {/* 删除确认对话框 */}
       {deleteModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">確認刪除</h3>
-            <p className="text-gray-600 mb-6">
-              您確定要刪除相冊「{albumToDelete?.album_name}」嗎？此操作無法撤銷，相冊中的所有圖片都將被刪除。
+            <p className="text-gray-600 mb-2">
+              您確定要刪除相冊 "{albumToDelete?.album_name}" 嗎？
             </p>
-            <div className="flex justify-end space-x-4">
+            <p className="text-red-600 text-sm mb-6">
+              警告：刪除相冊將同時刪除其中的所有圖片，此操作無法撤銷。
+            </p>
+            <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setDeleteModalOpen(false)}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
               >
                 取消
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700"
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
               >
-                確認刪除
+                刪除
               </button>
             </div>
           </div>
         </div>
       )}
+      
+      {/* 右下角固定按钮 */}
+      <div className="fixed bottom-6 right-6 flex flex-col space-y-3">
+        <Link href="/admin/albums/new/upload">
+          <div className="w-14 h-14 bg-green-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-green-700 transition-colors" title="快速創建並上傳">
+            <Upload className="w-6 h-6" />
+          </div>
+        </Link>
+      </div>
     </div>
   );
 } 
