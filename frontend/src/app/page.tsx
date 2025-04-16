@@ -31,7 +31,7 @@ function Main() {
               致力創造一個美好，幸福，健康的居家環境。
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/cases">
+              <Link href="/services">
                 <Button size="lg" className="bg-rose-600 hover:bg-rose-700 text-white px-8 py-6 rounded-lg text-lg font-medium transition-all shadow-md hover:shadow-lg">
                   查看服務項目
                 </Button>
@@ -122,10 +122,25 @@ function Main() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-12">我們的服務</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <FeatureCard iconType="components" number="專業設計" text="客製化空間規劃" />
-            <FeatureCard iconType="categories" number="精緻施工" text="高品質裝修工程" />
-            <FeatureCard iconType="compatibility" number="全屋翻新" text="舊屋改造煥然一新" />
-            <FeatureCard iconType="copyPaste" number="智能家居" text="現代化智慧空間" />
+            <Link href="/services" className="transition-transform hover:scale-105">
+              <FeatureCard iconType="components" number="專業設計" text="客製化空間規劃" />
+            </Link>
+            <Link href="/services" className="transition-transform hover:scale-105">
+              <FeatureCard iconType="categories" number="精緻施工" text="高品質裝修工程" />
+            </Link>
+            <Link href="/services" className="transition-transform hover:scale-105">
+              <FeatureCard iconType="compatibility" number="全屋翻新" text="舊屋改造煥然一新" />
+            </Link>
+            <Link href="/services" className="transition-transform hover:scale-105">
+              <FeatureCard iconType="copyPaste" number="智能家居" text="現代化智慧空間" />
+            </Link>
+          </div>
+          <div className="mt-10">
+            <Link href="/services">
+              <Button variant="outline" className="border-rose-600 text-rose-600 hover:bg-rose-50 px-8 py-2 rounded-lg text-lg font-medium transition-all">
+                查看更多服務
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
