@@ -5,10 +5,26 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AdminNav from '@/components/adminNav';
 
+interface Statistics {
+  album_count: number;
+  image_count: number;
+  service_count: number;
+  contact_count: number;
+  unread_contact_count: number;
+}
+
 export default function AdminDashboardPage() {
   const [username, setUsername] = useState<string>('管理員');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [stats, setStats] = useState<Statistics>({
+    album_count: 0,
+    image_count: 0,
+    service_count: 0,
+    contact_count: 0,
+    unread_contact_count: 0
+  });
   const router = useRouter();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     // 检查是否已登录
@@ -26,26 +42,41 @@ export default function AdminDashboardPage() {
       }
     } catch (error) {
       console.error('獲取用戶信息失敗', error);
-    } finally {
-      setIsLoading(false);
     }
-  }, [router]);
+
+    // 获取统计数据
+    const fetchStatistics = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/admin/statistics`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        } else {
+          console.error('獲取統計數據失敗');
+        }
+      } catch (error) {
+        console.error('獲取統計數據出錯', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStatistics();
+  }, [router, API_URL]);
 
   // 管理功能卡片数据
   const managementCards = [
     {
-      title: '案例管理',
-      description: '管理相冊、文件夾和圖片上傳',
+      title: '相冊管理',
+      description: '管理相冊和圖片上傳',
       icon: '📁',
-      href: '/admin/upload',
+      href: '/admin/albums',
       color: 'bg-blue-100 hover:bg-blue-200',
-    },
-    {
-      title: '作品集管理',
-      description: '管理案例展示內容',
-      icon: '🏠',
-      href: '/admin/cases',
-      color: 'bg-green-100 hover:bg-green-200',
     },
     {
       title: '服務管理',
@@ -67,27 +98,27 @@ export default function AdminDashboardPage() {
   const statsCards = [
     {
       title: '相冊數量',
-      value: '12',
+      value: stats.album_count.toString(),
       icon: '📷',
       color: 'bg-indigo-100',
     },
     {
-      title: '案例數量',
-      value: '8',
-      icon: '📋',
-      color: 'bg-pink-100',
-    },
-    {
       title: '圖片總數',
-      value: '48',
+      value: stats.image_count.toString(),
       icon: '🖼️',
       color: 'bg-teal-100',
     },
     {
-      title: '訪問量',
-      value: '1,254',
-      icon: '👁️',
-      color: 'bg-orange-100',
+      title: '服務項目',
+      value: stats.service_count.toString(),
+      icon: '🛠️',
+      color: 'bg-purple-100',
+    },
+    {
+      title: '用戶消息',
+      value: `${stats.unread_contact_count}/${stats.contact_count}`,
+      icon: '✉️',
+      color: `${stats.unread_contact_count > 0 ? 'bg-red-100' : 'bg-green-100'}`,
     },
   ];
 
@@ -113,7 +144,7 @@ export default function AdminDashboardPage() {
           {/* 管理功能区 */}
           <div className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">管理功能</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {managementCards.map((card, index) => (
                 <Link href={card.href} key={index}>
                   <div className={`p-6 rounded-lg shadow-sm ${card.color} transition-colors duration-200 h-full flex flex-col`}>
@@ -147,28 +178,28 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* 最近活动 */}
+          {/* 快速操作 */}
           <div className="mt-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">最近活動</h2>
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="space-y-4">
-                <div className="border-b pb-4">
-                  <p className="text-gray-600 text-sm">2023-11-01 10:30</p>
-                  <p className="text-gray-800">上傳了5張新圖片到"現代簡約風格"相冊</p>
-                </div>
-                <div className="border-b pb-4">
-                  <p className="text-gray-600 text-sm">2023-10-28 15:45</p>
-                  <p className="text-gray-800">創建了新相冊"北歐風格"</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">2023-10-25 09:15</p>
-                  <p className="text-gray-800">更新了"專業設計"服務內容</p>
-                </div>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">快速操作</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">新增相冊</h3>
+                <p className="text-gray-600 mb-4">快速創建新的相冊，用於整理和展示您的作品。</p>
+                <Link href="/admin/albums/new">
+                  <div className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    創建相冊
+                  </div>
+                </Link>
               </div>
-              <div className="mt-4 text-center">
-                <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                  查看更多活動
-                </button>
+              
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">上傳圖片</h3>
+                <p className="text-gray-600 mb-4">向現有相冊添加新的圖片。</p>
+                <Link href="/admin/images/upload">
+                  <div className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                    上傳圖片
+                  </div>
+                </Link>
               </div>
             </div>
           </div>

@@ -10,29 +10,18 @@ class LabelEnum(str, enum.Enum):
     HOUSE = "house"
 
 # SQLAlchemy 模型
-class FolderModel(Base):
-    __tablename__ = "folders"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    folder_name = Column(String(100), nullable=False)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
-    
-    # 关系
-    albums = relationship("AlbumModel", back_populates="folder", cascade="all, delete-orphan")
-
 class AlbumModel(Base):
     __tablename__ = "albums"
     
     id = Column(Integer, primary_key=True, index=True)
     album_name = Column(String(100), nullable=False)
     label = Column(Enum(LabelEnum), nullable=False, default=LabelEnum.HOUSE)
-    folder_id = Column(Integer, ForeignKey("folders.id"), nullable=True)
+    description = Column(Text, nullable=True)
+    cover_image = Column(String(255), nullable=True)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
     
     # 关系
-    folder = relationship("FolderModel", back_populates="albums")
     images = relationship("ImageModel", back_populates="album", cascade="all, delete-orphan")
 
 class ImageModel(Base):
@@ -41,6 +30,7 @@ class ImageModel(Base):
     id = Column(Integer, primary_key=True, index=True)
     image_name = Column(String(255), nullable=False)
     object_name = Column(String(255), nullable=False)  # 存储路径或对象存储键
+    description = Column(Text, nullable=True)
     album_id = Column(Integer, ForeignKey("albums.id"), nullable=False)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
@@ -48,23 +38,14 @@ class ImageModel(Base):
     # 关系
     album = relationship("AlbumModel", back_populates="images")
 
-class CaseModel(Base):
-    __tablename__ = "cases"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(100), nullable=False)
-    description = Column(Text, nullable=False)
-    image = Column(String(255), nullable=False)
-    date = Column(String(10), nullable=False)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
-
 class ServiceModel(Base):
     __tablename__ = "services"
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
     description = Column(Text, nullable=False)
+    icon = Column(String(50), nullable=True)  # 存储图标名称
+    order = Column(Integer, default=0)  # 显示顺序
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -76,4 +57,5 @@ class ContactModel(Base):
     phone = Column(String(20), nullable=False)
     email = Column(String(100), nullable=False)
     message = Column(Text, nullable=False)
+    is_read = Column(Integer, default=0)  # 0表示未读，1表示已读
     created_at = Column(DateTime, default=func.now()) 

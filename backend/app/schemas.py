@@ -22,10 +22,17 @@ class Folder(FolderBase):
 class AlbumBase(BaseModel):
     album_name: str
     label: LabelEnum
-    folder_id: Optional[int] = None
+    description: Optional[str] = None
+    cover_image: Optional[str] = None
 
 class AlbumCreate(AlbumBase):
     pass
+
+class AlbumUpdate(BaseModel):
+    album_name: Optional[str] = None
+    label: Optional[LabelEnum] = None
+    description: Optional[str] = None
+    cover_image: Optional[str] = None
 
 class Album(AlbumBase):
     id: int
@@ -40,9 +47,15 @@ class ImageBase(BaseModel):
     image_name: str
     object_name: str
     album_id: int
+    description: Optional[str] = None
 
 class ImageCreate(ImageBase):
     pass
+
+class ImageUpdate(BaseModel):
+    image_name: Optional[str] = None
+    description: Optional[str] = None
+    album_id: Optional[int] = None
 
 class Image(ImageBase):
     id: int
@@ -79,12 +92,22 @@ class Case(CaseBase):
 class ServiceBase(BaseModel):
     name: str
     description: str
+    icon: Optional[str] = None
+    order: Optional[int] = 0
 
 class ServiceCreate(ServiceBase):
     pass
 
+class ServiceUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    icon: Optional[str] = None
+    order: Optional[int] = None
+
 class Service(ServiceBase):
     id: int
+    created_at: datetime
+    updated_at: datetime
     
     class Config:
         orm_mode = True
@@ -96,9 +119,21 @@ class ContactRequest(BaseModel):
     email: EmailStr
     message: str
 
+class ContactUpdate(BaseModel):
+    is_read: int
+
 class ContactResponse(ContactRequest):
     id: int
+    is_read: int
     created_at: datetime
     
     class Config:
-        orm_mode = True 
+        orm_mode = True
+
+# 统计数据模型
+class Statistics(BaseModel):
+    album_count: int
+    image_count: int
+    service_count: int
+    contact_count: int
+    unread_contact_count: int 

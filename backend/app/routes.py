@@ -112,7 +112,7 @@ async def get_album(album_id: int, db: Session = Depends(get_db)):
     return db_album
 
 @router.put("/albums/{album_id}", response_model=schemas.Album)
-async def update_album(album_id: int, album: schemas.AlbumCreate, db: Session = Depends(get_db)):
+async def update_album(album_id: int, album: schemas.AlbumUpdate, db: Session = Depends(get_db)):
     db_album = crud.update_album(db, album_id=album_id, album=album)
     if db_album is None:
         raise HTTPException(status_code=404, detail="相册不存在")
@@ -139,10 +139,18 @@ async def get_album_images(album_id: int, skip: int = 0, limit: int = 100, db: S
 async def create_image(image: schemas.ImageCreate, db: Session = Depends(get_db)):
     return crud.create_image(db=db, image=image)
 
+@router.put("/images/{image_id}", response_model=schemas.Image)
+async def update_image(image_id: int, image: schemas.ImageUpdate, db: Session = Depends(get_db)):
+    db_image = crud.update_image(db, image_id=image_id, image=image)
+    if db_image is None:
+        raise HTTPException(status_code=404, detail="图片不存在")
+    return db_image
+
 # 文件上传路由
 @router.post("/upload", response_model=schemas.Image)
 async def upload_image(
     album_id: int = Form(...),
+    description: Optional[str] = Form(None),
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
@@ -169,7 +177,8 @@ async def upload_image(
     image_data = schemas.ImageCreate(
         image_name=file.filename,
         object_name=file_path,
-        album_id=album_id
+        album_id=album_id,
+        description=description
     )
     
     return crud.create_image(db=db, image=image_data)
@@ -194,20 +203,10 @@ async def get_image_file(image_id: int, db: Session = Depends(get_db)):
 
 @router.delete("/images/{image_id}", response_model=bool)
 async def delete_image(image_id: int, db: Session = Depends(get_db)):
-    db_image = crud.get_image(db, image_id=image_id)
-    if not db_image:
-        raise HTTPException(status_code=404, detail="图片不存在")
-    
-    # 尝试删除实际文件
-    try:
-        if os.path.exists(db_image.object_name):
-            os.remove(db_image.object_name)
-    except Exception as e:
-        # 记录错误但继续删除数据库记录
-        print(f"删除文件时出错: {str(e)}")
-    
     result = crud.delete_image(db, image_id=image_id)
-    return result
+    if not result:
+        raise HTTPException(status_code=404, detail="图片不存在")
+    return True
 
 # 案例相关路由
 @router.get("/cases", response_model=List[schemas.Case])
@@ -239,7 +238,55 @@ async def get_service(service_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="服务不存在")
     return db_service
 
-# 联系表单路由
+@router.post("/services", response_model=schemas.Service)
+async def create_service(service: schemas.ServiceCreate, db: Session = Depends(get_db)):
+    return crud.create_service(db=db, service=service)
+
+@router.put("/services/{service_id}", response_model=schemas.Service)
+async def update_service(service_id: int, service: schemas.ServiceUpdate, db: Session = Depends(get_db)):
+    db_service = crud.update_service(db, service_id=service_id, service=service)
+    if db_service is None:
+        raise HTTPException(status_code=404, detail="服务不存在")
+    return db_service
+
+@router.delete("/services/{service_id}", response_model=bool)
+async def delete_service(service_id: int, db: Session = Depends(get_db)):
+    result = crud.delete_service(db, service_id=service_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="服务不存在")
+    return True
+
+# 联系表单相关路由
 @router.post("/contact", response_model=schemas.ContactResponse)
 async def create_contact(contact: schemas.ContactRequest, db: Session = Depends(get_db)):
-    return crud.create_contact(db=db, contact=contact) 
+    return crud.create_contact(db=db, contact=contact)
+
+@router.get("/admin/contacts", response_model=List[schemas.ContactResponse])
+async def get_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_contacts(db, skip=skip, limit=limit)
+
+@router.get("/admin/contacts/{contact_id}", response_model=schemas.ContactResponse)
+async def get_contact(contact_id: int, db: Session = Depends(get_db)):
+    db_contact = crud.get_contact(db, contact_id=contact_id)
+    if db_contact is None:
+        raise HTTPException(status_code=404, detail="联系消息不存在")
+    return db_contact
+
+@router.put("/admin/contacts/{contact_id}", response_model=schemas.ContactResponse)
+async def update_contact_status(contact_id: int, status: schemas.ContactUpdate, db: Session = Depends(get_db)):
+    db_contact = crud.update_contact_status(db, contact_id=contact_id, is_read=status.is_read)
+    if db_contact is None:
+        raise HTTPException(status_code=404, detail="联系消息不存在")
+    return db_contact
+
+@router.delete("/admin/contacts/{contact_id}", response_model=bool)
+async def delete_contact(contact_id: int, db: Session = Depends(get_db)):
+    result = crud.delete_contact(db, contact_id=contact_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="联系消息不存在")
+    return True
+
+# 统计数据路由
+@router.get("/admin/statistics", response_model=schemas.Statistics)
+async def get_statistics(db: Session = Depends(get_db)):
+    return crud.get_statistics(db) 
