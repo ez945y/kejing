@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { fetchAllServices } from "@/app/api/serviceApi";
 import MainNav from "@/components/mainNav";
-import MainFooter from "@/components/mainFooter";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
@@ -193,7 +192,6 @@ const ServicesPage = () => {
           </div>
         </motion.section>
       </main>
-      <MainFooter />
     </>
   );
 };

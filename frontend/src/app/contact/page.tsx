@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import MainNav from "@/components/mainNav";
-import MainFooter from "@/components/mainFooter";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { submitContactForm } from "@/app/api/contactApi";
 
@@ -273,7 +272,6 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-      <MainFooter />
     </>
   );
 }

@@ -1,14 +1,11 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from "@/components/ui/card";
-import Image from 'next/image';
 import { fetchAllAlbumsWithImages, Album, Image as ImageType } from '@/app/api/galleryService';
 import Link from 'next/link';
 import MainNav from '@/components/mainNav';
-import MainFooter from '@/components/mainFooter';
-import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/emptyState';
 import { FileQuestion } from 'lucide-react';
 
@@ -42,7 +39,7 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <MainNav />
-      <main className="flex-grow container mx-auto mt-12 px-4 py-8">
+      <main className="flex-grow container mx-auto mt-16 px-4 py-8">
         <h1 className="text-3xl font-bold text-center mb-8">精選作品集</h1>
         
         <Tabs 
@@ -105,7 +102,6 @@ export default function GalleryPage() {
           </div>
         )}
       </main>
-      <MainFooter />
     </div>
   );
 } 

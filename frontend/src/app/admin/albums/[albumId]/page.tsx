@@ -105,7 +105,7 @@ export default function AlbumDetailPage() {
       });
       
       if (!albumResponse.ok) {
-        throw new Error('相册不存在或无法访问');
+        throw new Error('相冊不存在或無法訪問');
       }
       
       const albumData = await albumResponse.json();
@@ -123,7 +123,7 @@ export default function AlbumDetailPage() {
         setImages(imagesData);
       }
     } catch (error) {
-      console.error('获取相册详情失败', error);
+      console.error('獲取相冊詳情失敗', error);
     } finally {
       setIsLoading(false);
     }
@@ -166,17 +166,17 @@ export default function AlbumDetailPage() {
           const newImage = await response.json();
           setImages(prev => [...prev, newImage]);
           setUploadStatus('success');
-          setUploadMessage(`成功上传 ${files.length} 张图片`);
+          setUploadMessage(`成功上傳 ${files.length} 張圖片`);
         } else {
           setUploadStatus('error');
-          setUploadMessage('上传图片失败，请重试');
+          setUploadMessage('上傳圖片錯誤，請重試');
           break;
         }
       }
     } catch (error) {
-      console.error('上传图片出错', error);
+      console.error('上傳圖片出錯', error);
       setUploadStatus('error');
-      setUploadMessage('上传过程中发生错误');
+      setUploadMessage('上傳過程中發生錯誤');
     } finally {
       setIsUploading(false);
       // 清空文件选择，以便再次选择相同文件
@@ -209,10 +209,10 @@ export default function AlbumDetailPage() {
         setDeleteModalOpen(false);
         setSelectedImageId(null);
       } else {
-        console.error('删除图片失败');
+        console.error('刪除圖片失敗');
       }
     } catch (error) {
-      console.error('删除图片出错', error);
+      console.error('刪除圖片出錯', error);
     }
   };
 
@@ -239,10 +239,10 @@ export default function AlbumDetailPage() {
           cover_image: String(imageId)
         });
       } else {
-        console.error('设置封面图片失败');
+        console.error('設置封面圖片失敗');
       }
     } catch (error) {
-      console.error('设置封面图片出错', error);
+      console.error('設置封面圖片出錯', error);
     }
   };
 
@@ -292,12 +292,12 @@ export default function AlbumDetailPage() {
             <div className="flex justify-center mb-4">
               <Info className="h-16 w-16 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">相册不存在</h3>
-            <p className="text-gray-600 mb-6">无法找到该相册或您没有权限访问。</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">相冊不存在</h3>
+            <p className="text-gray-600 mb-6">無法找到此相冊或您沒有權限訪問。</p>
             <Link href="/admin/albums">
               <div className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                返回相册列表
+                返回相冊列表
               </div>
             </Link>
           </div>
@@ -317,7 +317,7 @@ export default function AlbumDetailPage() {
             <Link href="/admin/albums">
               <div className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors mb-6 bg-white px-4 py-2 rounded-full shadow-sm">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                返回相册列表
+                返回相冊列表
               </div>
             </Link>
             <div className="flex flex-col md:flex-row md:justify-between md:items-center bg-white p-6 rounded-xl shadow-sm">
@@ -325,7 +325,7 @@ export default function AlbumDetailPage() {
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{album.album_name}</h1>
                 <div className="flex items-center mb-2">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2">
-                    {album.label === 'business' ? '商业案例' : '住宅案例'}
+                    {album.label === 'business' ? '商業案例' : '住宅案例'}
                   </span>
                   <span className="text-gray-500 text-sm">創建於 {formatDate(album.created_at)}</span>
                 </div>
@@ -371,7 +371,7 @@ export default function AlbumDetailPage() {
           {isUploading && (
             <div className="mb-6 p-4 bg-blue-50 text-blue-800 rounded-lg flex items-center border border-blue-200">
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              正在上传图片，请稍候...
+              正在上傳圖片，請稍後...
             </div>
           )}
           
@@ -381,14 +381,14 @@ export default function AlbumDetailPage() {
               <div className="flex justify-center mb-4">
                 <Upload className="h-20 w-20 text-gray-300" />
               </div>
-              <h3 className="text-xl font-medium text-gray-900 mb-2">相册中没有图片</h3>
-              <p className="text-gray-600 mb-6 max-w-md mx-auto">点击上传按钮添加第一张图片到这个相册。</p>
+              <h3 className="text-xl font-medium text-gray-900 mb-2">相冊中沒有圖片</h3>
+              <p className="text-gray-600 mb-6 max-w-md mx-auto">點擊上傳按鈕添加第一張圖片到這個相冊。</p>
               <button
                 onClick={handleUploadClick}
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
               >
                 <Plus className="w-5 h-5 mr-2" />
-                上传图片
+                上傳圖片
               </button>
             </div>
           ) : (
@@ -412,7 +412,7 @@ export default function AlbumDetailPage() {
                           <button
                             onClick={() => handleSetCoverImage(image.id)}
                             className="p-2 bg-blue-600 bg-opacity-90 rounded-full text-white hover:bg-blue-700 transition-colors transform hover:scale-110"
-                            title="设为封面"
+                            title="設為封面"
                           >
                             <Info className="w-5 h-5" />
                           </button>
@@ -420,7 +420,7 @@ export default function AlbumDetailPage() {
                         <button
                           onClick={() => handleDeleteClick(image.id)}
                           className="p-2 bg-red-600 bg-opacity-90 rounded-full text-white hover:bg-red-700 transition-colors transform hover:scale-110"
-                          title="删除图片"
+                          title="刪除圖片"
                         >
                           <Trash2 className="w-5 h-5" />
                         </button>
@@ -428,7 +428,7 @@ export default function AlbumDetailPage() {
                     </div>
                     {String(album.cover_image) === String(image.id) && (
                       <div className="absolute top-3 left-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-full shadow-sm">
-                        封面图片
+                        封面圖片
                       </div>
                     )}
                   </div>
@@ -451,9 +451,9 @@ export default function AlbumDetailPage() {
       {deleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">确认删除</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">確認刪除</h3>
             <p className="text-gray-600 mb-6">
-              您确定要删除这张图片吗？此操作无法撤销。
+              您確定要刪除這張圖片嗎？此操作無法撤銷。
             </p>
             <div className="flex justify-end space-x-3">
               <button
@@ -466,7 +466,7 @@ export default function AlbumDetailPage() {
                 onClick={handleDeleteConfirm}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
-                删除
+                刪除
               </button>
             </div>
           </div>

@@ -43,11 +43,11 @@ function MainNav() {
                 state ? "block" : "hidden"
               }`}
             >
-              <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0 mt-2 ml-5 font-semibold">
+              <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0 mt-2 ml-5 mr-10 font-semibold">
                 {menus.map((item, idx) => (
                   <li
                     key={idx}
-                    className=" hover:text-rose-600 text-sm"
+                    className=" hover:text-rose-600"
                   >
                     <Link href={item.path}>{item.title}</Link>
                   </li>
