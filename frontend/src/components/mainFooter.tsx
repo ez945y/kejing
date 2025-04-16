@@ -1,56 +1,90 @@
-import { Flower2 } from 'lucide-react';
-import React from 'react'
+import React from 'react';
 import Link from 'next/link';
+import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react';
 
 const MainFooter = () => {
-    // const footerStyles = {
-    //   boxShadow: "0px -5px 10px rgba(0, 0, 0, 0.03)", // Adjust values as needed
-    // };
   return (
-    <div className="sticky-footer mt-10 shadow-md">
-      <footer className="py-6 text-gray-900 w-full" >
-        <div className="container px-6 mx-auto space-y-6 divide-y divide-gray-400 md:space-y-12 divide-opacity-50">
-          <div className="flex items-center justify-between">
-            <div className="flex justify-center space-x-4 lg:pt-0 lg:col-end-13">
-              <a
-               
-                href="mailto:siddhartha.singh3093@gmail.com"
-                title="Email"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-rose-600 text-gray-50"
+    <footer className="bg-white border-t border-gray-100">
+      {/* 主要内容区域 */}
+      <div className="container mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* 公司信息 */}
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">科頂設計</h3>
+            <p className="text-gray-600 text-sm mb-4">
+              將功能性與美學完美結合，打造符合您需求的理想空間。
+            </p>
+            <div className="flex space-x-3">
+              <a 
+                href="https://www.facebook.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-rose-50 hover:bg-rose-100 p-2 rounded-full transition-colors"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                </svg>
+                <Facebook size={16} className="text-rose-600" />
               </a>
-              
-              <Link
-                
-                href="https://github.com/siddhartha-up80"
-                target='_blank'
-                title="GitHub"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-rose-600 text-gray-50"
+              <a 
+                href="https://www.instagram.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-rose-50 hover:bg-rose-100 p-2 rounded-full transition-colors"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-5 h-5"
-                >
-                  <path d="M10.9,2.1c-4.6,0.5-8.3,4.2-8.8,8.7c-0.5,4.7,2.2,8.9,6.3,10.5C8.7,21.4,9,21.2,9,20.8v-1.6c0,0-0.4,0.1-0.9,0.1 c-1.4,0-2-1.2-2.1-1.9c-0.1-0.4-0.3-0.7-0.6-1C5.1,16.3,5,16.3,5,16.2C5,16,5.3,16,5.4,16c0.6,0,1.1,0.7,1.3,1c0.5,0.8,1.1,1,1.4,1 c0.4,0,0.7-0.1,0.9-0.2c0.1-0.7,0.4-1.4,1-1.8c-2.3-0.5-4-1.8-4-4c0-1.1,0.5-2.2,1.2-3C7.1,8.8,7,8.3,7,7.6C7,7.2,7,6.6,7.3,6 c0,0,1.4,0,2.8,1.3C10.6,7.1,11.3,7,12,7s1.4,0.1,2,0.3C15.3,6,16.8,6,16.8,6C17,6.6,17,7.2,17,7.6c0,0.8-0.1,1.2-0.2,1.4 c0.7,0.8,1.2,1.8,1.2,3c0,2.2-1.7,3.5-4,4c0.6,0.5,1,1.4,1,2.3v2.6c0,0.3,0.3,0.6,0.7,0.5c3.7-1.5,6.3-5.1,6.3-9.3 C22,6.1,16.9,1.4,10.9,2.1z"></path>
-                </svg>
+                <Instagram size={16} className="text-rose-600" />
+              </a>
+            </div>
+          </div>
+
+          {/* 快速链接 */}
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">快速連結</h3>
+            <div className="grid grid-cols-2 gap-2">
+              <Link href="/" className="text-gray-600 hover:text-rose-600 transition-colors text-sm">
+                首頁
+              </Link>
+              <Link href="/about" className="text-gray-600 hover:text-rose-600 transition-colors text-sm">
+                關於我們
+              </Link>
+              <Link href="/services" className="text-gray-600 hover:text-rose-600 transition-colors text-sm">
+                服務項目
+              </Link>
+              <Link href="/gallery" className="text-gray-600 hover:text-rose-600 transition-colors text-sm">
+                作品集
+              </Link>
+              <Link href="/contact" className="text-gray-600 hover:text-rose-600 transition-colors text-sm">
+                聯絡我們
               </Link>
             </div>
           </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
 
-export default MainFooter
+          {/* 联络信息 */}
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">聯絡資訊</h3>
+            <div className="space-y-2">
+              <div className="flex items-start">
+                <MapPin size={16} className="text-rose-600 mt-0.5 mr-2 flex-shrink-0" />
+                <span className="text-gray-600 text-sm">新北市新莊區頭興街1之22號4樓</span>
+              </div>
+              <div className="flex items-center">
+                <Phone size={16} className="text-rose-600 mr-2 flex-shrink-0" />
+                <span className="text-gray-600 text-sm">0928-220-153</span>
+              </div>
+              <div className="flex items-center">
+                <Mail size={16} className="text-rose-600 mr-2 flex-shrink-0" />
+                <span className="text-gray-600 text-sm">cdw1217com@yahoo.com.tw</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* 版权声明 */}
+      <div className="bg-gray-50 py-4">
+        <div className="container mx-auto px-6 text-center text-gray-500 text-xs">
+          © {new Date().getFullYear()} 可京設計. 版權所有
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default MainFooter;
