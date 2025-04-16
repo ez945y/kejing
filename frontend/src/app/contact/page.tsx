@@ -8,13 +8,13 @@ import { Label } from "@/components/ui/label";
 import MainNav from "@/components/mainNav";
 import MainFooter from "@/components/mainFooter";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { submitContactForm } from "@/app/api/contactApi";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    subject: "",
     message: "",
   });
   
@@ -35,16 +35,20 @@ export default function ContactPage() {
     setSubmitStatus(null);
     
     try {
-      // 这里可以添加实际的表单提交逻辑
-      // 目前仅模拟提交
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // 调用API发送联系表单数据
+      await submitContactForm({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+      });
+      
       setSubmitStatus("success");
       // 重置表单
       setFormData({
         name: "",
         email: "",
         phone: "",
-        subject: "",
         message: "",
       });
     } catch (error) {
@@ -181,19 +185,6 @@ export default function ContactPage() {
                       value={formData.phone} 
                       onChange={handleChange} 
                       placeholder="請輸入您的電話號碼" 
-                    />
-                  </div>
-                  
-                  {/* 主题 */}
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">主題 <span className="text-rose-500">*</span></Label>
-                    <Input 
-                      id="subject" 
-                      name="subject" 
-                      value={formData.subject} 
-                      onChange={handleChange} 
-                      placeholder="請輸入訊息主題" 
-                      required 
                     />
                   </div>
                   

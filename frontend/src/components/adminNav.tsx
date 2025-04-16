@@ -20,6 +20,7 @@ export default function AdminNav() {
     { href: '/admin/upload', label: '案例管理' },
     { href: '/admin/cases', label: '作品集管理' },
     { href: '/admin/services', label: '服務管理' },
+    { href: '/admin/messages', label: '聯繫消息' },
   ];
 
   return (

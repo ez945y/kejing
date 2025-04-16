@@ -4,15 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminNav from '@/components/adminNav';
 import { Eye, Trash2, Mail, CheckCircle, PhoneCall, Clock } from 'lucide-react';
+import { fetchAllContacts, updateContactStatus, deleteContact, ContactResponse, ContactUpdateRequest } from '@/app/api/contactApi';
 
-interface Contact {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  message: string;
-  is_read: number;
-  created_at: string;
+// 扩展ContactResponse接口，使其与后端数据匹配
+interface Contact extends Omit<ContactResponse, 'is_read'> {
+  is_read: number; // 后端返回的是数字类型 (0/1)
 }
 
 export default function MessagesPage() {
@@ -34,25 +30,22 @@ export default function MessagesPage() {
       return;
     }
 
-    fetchContacts();
+    fetchContactsList();
   }, [router]);
 
-  const fetchContacts = async () => {
+  const fetchContactsList = async () => {
     try {
       setIsLoading(true);
-      const token = localStorage.getItem('admin_token');
-      const response = await fetch(`${API_URL}/api/admin/contacts`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const token = localStorage.getItem('admin_token') || '';
+      const data = await fetchAllContacts(token);
       
-      if (response.ok) {
-        const data = await response.json();
-        setContacts(data);
-      } else {
-        console.error('獲取聯繫消息失敗');
-      }
+      // 转换数据类型以匹配界面需要
+      const contactsData = data.map(contact => ({
+        ...contact,
+        is_read: contact.is_read ? 1 : 0 // 将boolean类型转为数字类型
+      }));
+      
+      setContacts(contactsData as Contact[]);
     } catch (error) {
       console.error('獲取聯繫消息出錯', error);
     } finally {
@@ -67,24 +60,15 @@ export default function MessagesPage() {
     // 如果消息未读，则标记为已读
     if (contact.is_read === 0) {
       try {
-        const token = localStorage.getItem('admin_token');
-        const response = await fetch(`${API_URL}/api/admin/contacts/${contact.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ is_read: 1 })
-        });
+        const token = localStorage.getItem('admin_token') || '';
+        await updateContactStatus(token, contact.id, { is_read: true });
         
-        if (response.ok) {
-          // 更新本地状态
-          setContacts(contacts.map(c => 
-            c.id === contact.id ? { ...c, is_read: 1 } : c
-          ));
-          if (selectedContact) {
-            setSelectedContact({ ...contact, is_read: 1 });
-          }
+        // 更新本地状态
+        setContacts(contacts.map(c => 
+          c.id === contact.id ? { ...c, is_read: 1 } : c
+        ));
+        if (selectedContact) {
+          setSelectedContact({ ...contact, is_read: 1 });
         }
       } catch (error) {
         console.error('更新消息狀態出錯', error);
@@ -101,15 +85,10 @@ export default function MessagesPage() {
     if (!contactToDelete) return;
     
     try {
-      const token = localStorage.getItem('admin_token');
-      const response = await fetch(`${API_URL}/api/admin/contacts/${contactToDelete.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const token = localStorage.getItem('admin_token') || '';
+      const success = await deleteContact(token, contactToDelete.id);
       
-      if (response.ok) {
+      if (success) {
         // 从列表中移除
         setContacts(contacts.filter(c => c.id !== contactToDelete.id));
         setDeleteModalOpen(false);
@@ -148,21 +127,14 @@ export default function MessagesPage() {
 
   const handleMarkAllAsRead = async () => {
     try {
-      const token = localStorage.getItem('admin_token');
+      const token = localStorage.getItem('admin_token') || '';
       const unreadContacts = contacts.filter(c => c.is_read === 0);
       
       if (unreadContacts.length === 0) return;
       
       // 使用 Promise.all 并行处理所有请求
       await Promise.all(unreadContacts.map(contact => 
-        fetch(`${API_URL}/api/admin/contacts/${contact.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ is_read: 1 })
-        })
+        updateContactStatus(token, contact.id, { is_read: true })
       ));
       
       // 更新本地状态

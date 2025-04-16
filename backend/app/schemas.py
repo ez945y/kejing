@@ -116,7 +116,7 @@ class Service(ServiceBase):
 class ContactRequest(BaseModel):
     name: str
     phone: str
-    email: EmailStr
+    email: str
     message: str
 
 class ContactUpdate(BaseModel):
