@@ -13,7 +13,7 @@ interface Service {
   id: number;
   name: string;
   description: string;
-  icon: string | null;
+  icon?: string | null;
 }
 
 interface ProcessCardProps {
@@ -200,7 +200,7 @@ const ServicesPage = () => {
 
 const ServiceCard = ({ service }: ServiceCardProps) => {
   // 定義所有可用的圖標
-  const renderIcon = (iconName: string | null) => {
+  const renderIcon = (iconName: string | null | undefined) => {
     switch(iconName) {
       case 'lightbulb':
         return (

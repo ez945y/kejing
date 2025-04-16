@@ -45,14 +45,12 @@ function Main() {
           </div>
           <div className="mt-12 lg:mt-0 lg:w-1/2 relative">
             <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
-              <Image
-                src="/images/2.jpg"
-                alt="室內設計展示"
-                fill
-                style={{ objectFit: "cover" }}
-                className="rounded-xl"
-                priority
-              />
+              <div className="absolute inset-0 bg-[url('/images/2.jpg')] bg-cover bg-center rounded-xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl"></div>
+              <div className="absolute bottom-6 left-6 right-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">現代簡約風格</h3>
+                <p className="text-white/90">打造舒適、實用且富有美感的居住空間</p>
+              </div>
             </div>
             <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-rose-600 rounded-full opacity-20 blur-xl"></div>
             <div className="absolute -top-4 -right-4 w-32 h-32 bg-amber-400 rounded-full opacity-20 blur-xl"></div>
