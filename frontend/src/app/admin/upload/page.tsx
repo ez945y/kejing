@@ -7,21 +7,23 @@ import {
   fetchFolders, 
   createFolder, 
   createAlbum, 
-  uploadImage 
+  uploadImage,
+  Album,
+  Folder 
 } from '@/app/api/adminService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/hooks/use-toast';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import AdminNav from '@/components/adminNav';
 
 export default function AdminUploadPage() {
   const [loading, setLoading] = useState(false);
-  const [albums, setAlbums] = useState([]);
-  const [folders, setFolders] = useState([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [folders, setFolders] = useState<Folder[]>([]);
   const [selectedAlbumId, setSelectedAlbumId] = useState<number | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -60,8 +62,8 @@ export default function AdminUploadPage() {
       setFolders(foldersData);
     } catch (error) {
       toast({
-        title: "加载数据失败",
-        description: "请检查您的网络连接或权限",
+        title: "載入數據失敗",
+        description: "請檢查您的網絡連接或權限",
         variant: "destructive",
       });
     } finally {
@@ -73,7 +75,7 @@ export default function AdminUploadPage() {
   const handleCreateFolder = async () => {
     if (!newFolderName.trim()) {
       toast({
-        title: "请输入文件夹名称",
+        title: "請輸入文件夾名稱",
         variant: "destructive",
       });
       return;
@@ -82,7 +84,7 @@ export default function AdminUploadPage() {
     setLoading(true);
     try {
       const token = localStorage.getItem('admin_token');
-      if (!token) throw new Error("未登录");
+      if (!token) throw new Error("未登錄");
 
       await createFolder(token, { folder_name: newFolderName });
       
@@ -94,12 +96,12 @@ export default function AdminUploadPage() {
       setNewFolderName('');
       
       toast({
-        title: "文件夹创建成功",
+        title: "文件夾創建成功",
       });
     } catch (error) {
       toast({
-        title: "创建文件夹失败",
-        description: "请稍后再试",
+        title: "創建文件夾失敗",
+        description: "請稍後再試",
         variant: "destructive",
       });
     } finally {
@@ -111,7 +113,7 @@ export default function AdminUploadPage() {
   const handleCreateAlbum = async () => {
     if (!newAlbumName.trim()) {
       toast({
-        title: "请输入相册名称",
+        title: "請輸入案例名稱",
         variant: "destructive",
       });
       return;
@@ -120,7 +122,7 @@ export default function AdminUploadPage() {
     setLoading(true);
     try {
       const token = localStorage.getItem('admin_token');
-      if (!token) throw new Error("未登录");
+      if (!token) throw new Error("未登錄");
 
       await createAlbum(token, {
         album_name: newAlbumName,
@@ -138,12 +140,12 @@ export default function AdminUploadPage() {
       setNewAlbumFolderId(null);
       
       toast({
-        title: "相册创建成功",
+        title: "案例創建成功",
       });
     } catch (error) {
       toast({
-        title: "创建相册失败",
-        description: "请稍后再试",
+        title: "創建案例失敗",
+        description: "請稍後再試",
         variant: "destructive",
       });
     } finally {
@@ -162,7 +164,7 @@ export default function AdminUploadPage() {
   const handleUploadImages = async () => {
     if (!selectedAlbumId) {
       toast({
-        title: "请选择相册",
+        title: "請選擇案例",
         variant: "destructive",
       });
       return;
@@ -170,7 +172,7 @@ export default function AdminUploadPage() {
 
     if (selectedFiles.length === 0) {
       toast({
-        title: "请选择要上传的图片",
+        title: "請選擇要上傳的圖片",
         variant: "destructive",
       });
       return;
@@ -179,7 +181,7 @@ export default function AdminUploadPage() {
     setLoading(true);
     try {
       const token = localStorage.getItem('admin_token');
-      if (!token) throw new Error("未登录");
+      if (!token) throw new Error("未登錄");
 
       // 逐个上传文件
       for (const file of selectedFiles) {
@@ -190,13 +192,13 @@ export default function AdminUploadPage() {
       setSelectedFiles([]);
       
       toast({
-        title: "图片上传成功",
-        description: `已上传 ${selectedFiles.length} 张图片`,
+        title: "圖片上傳成功",
+        description: `已上傳 ${selectedFiles.length} 張圖片`,
       });
     } catch (error) {
       toast({
-        title: "上传图片失败",
-        description: "请稍后再试",
+        title: "上傳圖片失敗",
+        description: "請稍後再試",
         variant: "destructive",
       });
     } finally {
@@ -205,51 +207,66 @@ export default function AdminUploadPage() {
   };
 
   if (!isAuthenticated) {
-    return <div>正在加载...</div>;
+    return <div>正在載入...</div>;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminNav />
       
-      <div className="container mx-auto py-10 px-4">
-        <h1 className="text-3xl font-bold mb-8">内容管理</h1>
+      <div className="container mx-auto py-10 px-4 pt-20">
+        <h1 className="text-3xl font-bold mb-8">案例管理</h1>
         
         <Tabs defaultValue="upload" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="upload">上传图片</TabsTrigger>
-            <TabsTrigger value="album">管理相册</TabsTrigger>
-            <TabsTrigger value="folder">管理文件夹</TabsTrigger>
+            <TabsTrigger value="upload">上傳圖片</TabsTrigger>
+            <TabsTrigger value="album">管理案例</TabsTrigger>
+            <TabsTrigger value="folder">管理文件夾</TabsTrigger>
           </TabsList>
           
           {/* 上传图片 */}
           <TabsContent value="upload">
             <Card>
               <CardHeader>
-                <CardTitle>上传图片</CardTitle>
+                <CardTitle>上傳圖片</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="album">选择相册</Label>
+                  <Label htmlFor="album">選擇案例</Label>
                   <Select 
-                    value={selectedAlbumId?.toString() || ''} 
-                    onValueChange={(value) => setSelectedAlbumId(Number(value))}
+                    value={selectedAlbumId?.toString() || 'none'} 
+                    onValueChange={(value) => value !== 'none' && setSelectedAlbumId(Number(value))}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="选择相册" />
+                      <SelectValue placeholder="選擇案例" />
                     </SelectTrigger>
                     <SelectContent>
-                      {albums.map((album: any) => (
-                        <SelectItem key={album.id} value={album.id.toString()}>
-                          {album.album_name} ({album.label})
+                      {albums.length === 0 ? (
+                        <SelectItem value="none" disabled>
+                          暫無案例，請先創建案例
                         </SelectItem>
-                      ))}
+                      ) : (
+                        albums.map((album) => (
+                          <SelectItem key={album.id} value={album.id.toString()}>
+                            {album.album_name} ({album.label === 'business' ? '商業空間' : '居家空間'})
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
+                  <div className="pt-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => document.querySelector('[value="album"]')?.dispatchEvent(new Event('click'))}
+                    >
+                      + 創建新案例
+                    </Button>
+                  </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="files">选择图片</Label>
+                  <Label htmlFor="files">選擇圖片</Label>
                   <Input 
                     id="files" 
                     type="file" 
@@ -258,7 +275,7 @@ export default function AdminUploadPage() {
                     onChange={handleFileChange}
                   />
                   {selectedFiles.length > 0 && (
-                    <p className="text-sm text-gray-500">已选择 {selectedFiles.length} 个文件</p>
+                    <p className="text-sm text-gray-500">已選擇 {selectedFiles.length} 個文件</p>
                   )}
                 </div>
                 
@@ -266,7 +283,7 @@ export default function AdminUploadPage() {
                   onClick={handleUploadImages} 
                   disabled={loading || !selectedAlbumId || selectedFiles.length === 0}
                 >
-                  {loading ? '上传中...' : '上传图片'}
+                  {loading ? '上傳中...' : '上傳圖片'}
                 </Button>
               </CardContent>
             </Card>
@@ -276,81 +293,106 @@ export default function AdminUploadPage() {
           <TabsContent value="album">
             <Card>
               <CardHeader>
-                <CardTitle>创建新相册</CardTitle>
+                <CardTitle>創建新案例</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="albumName">相册名称</Label>
+                  <Label htmlFor="albumName">案例名稱</Label>
                   <Input 
                     id="albumName" 
                     value={newAlbumName}
                     onChange={(e) => setNewAlbumName(e.target.value)}
-                    placeholder="输入相册名称"
+                    placeholder="輸入案例名稱"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="albumLabel">相册类型</Label>
+                  <Label htmlFor="albumLabel">案例類型</Label>
                   <Select 
                     value={newAlbumLabel} 
                     onValueChange={setNewAlbumLabel}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="选择类型" />
+                      <SelectValue placeholder="選擇類型" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="business">商业空间</SelectItem>
-                      <SelectItem value="house">居家空间</SelectItem>
+                      <SelectItem value="business">商業空間</SelectItem>
+                      <SelectItem value="house">居家空間</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="folderSelect">所属文件夹 (可选)</Label>
+                  <Label htmlFor="folderSelect">所屬文件夾 (可選)</Label>
                   <Select 
-                    value={newAlbumFolderId?.toString() || ''} 
-                    onValueChange={(value) => setNewAlbumFolderId(value ? Number(value) : null)}
+                    value={newAlbumFolderId?.toString() || 'none'} 
+                    onValueChange={(value) => setNewAlbumFolderId(value === 'none' ? null : Number(value))}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="选择文件夹" />
+                      <SelectValue placeholder="選擇文件夾" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">不属于任何文件夹</SelectItem>
-                      {folders.map((folder: any) => (
+                      <SelectItem value="none">不屬於任何文件夾</SelectItem>
+                      {folders.map((folder) => (
                         <SelectItem key={folder.id} value={folder.id.toString()}>
                           {folder.folder_name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                  <div className="pt-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => document.querySelector('[value="folder"]')?.dispatchEvent(new Event('click'))}
+                    >
+                      + 創建新文件夾
+                    </Button>
+                  </div>
                 </div>
                 
                 <Button 
                   onClick={handleCreateAlbum} 
                   disabled={loading || !newAlbumName.trim()}
                 >
-                  {loading ? '创建中...' : '创建相册'}
+                  {loading ? '創建中...' : '創建案例'}
                 </Button>
               </CardContent>
             </Card>
             
             {/* 显示现有相册列表 */}
             <div className="mt-8">
-              <h3 className="text-xl font-semibold mb-4">现有相册</h3>
+              <h3 className="text-xl font-semibold mb-4">現有案例</h3>
               {albums.length === 0 ? (
-                <p className="text-gray-500">暂无相册</p>
+                <p className="text-gray-500">暫無案例</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {albums.map((album: any) => (
+                  {albums.map((album) => (
                     <Card key={album.id}>
                       <CardContent className="p-4">
                         <h4 className="font-medium">{album.album_name}</h4>
                         <p className="text-sm text-gray-500">
-                          类型: {album.label === 'business' ? '商业空间' : '居家空间'}
+                          類型: {album.label === 'business' ? '商業空間' : '居家空間'}
                         </p>
                         <p className="text-xs text-gray-400">
-                          创建于: {new Date(album.created_at).toLocaleDateString()}
+                          創建於: {new Date(album.created_at).toLocaleDateString('zh-TW')}
                         </p>
+                        <div className="mt-3 pt-3 border-t flex justify-end">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="mr-2"
+                            onClick={() => {
+                              setSelectedAlbumId(album.id);
+                              document.querySelector('[value="upload"]')?.dispatchEvent(new Event('click'));
+                            }}
+                          >
+                            上傳圖片
+                          </Button>
+                          <Button variant="destructive" size="sm">
+                            刪除
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
@@ -363,16 +405,16 @@ export default function AdminUploadPage() {
           <TabsContent value="folder">
             <Card>
               <CardHeader>
-                <CardTitle>创建新文件夹</CardTitle>
+                <CardTitle>創建新文件夾</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="folderName">文件夹名称</Label>
+                  <Label htmlFor="folderName">文件夾名稱</Label>
                   <Input 
                     id="folderName" 
                     value={newFolderName}
                     onChange={(e) => setNewFolderName(e.target.value)}
-                    placeholder="输入文件夹名称"
+                    placeholder="輸入文件夾名稱"
                   />
                 </div>
                 
@@ -380,25 +422,30 @@ export default function AdminUploadPage() {
                   onClick={handleCreateFolder} 
                   disabled={loading || !newFolderName.trim()}
                 >
-                  {loading ? '创建中...' : '创建文件夹'}
+                  {loading ? '創建中...' : '創建文件夾'}
                 </Button>
               </CardContent>
             </Card>
             
             {/* 显示现有文件夹列表 */}
             <div className="mt-8">
-              <h3 className="text-xl font-semibold mb-4">现有文件夹</h3>
+              <h3 className="text-xl font-semibold mb-4">現有文件夾</h3>
               {folders.length === 0 ? (
-                <p className="text-gray-500">暂无文件夹</p>
+                <p className="text-gray-500">暫無文件夾</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {folders.map((folder: any) => (
+                  {folders.map((folder) => (
                     <Card key={folder.id}>
                       <CardContent className="p-4">
                         <h4 className="font-medium">{folder.folder_name}</h4>
                         <p className="text-xs text-gray-400">
-                          创建于: {new Date(folder.created_at).toLocaleDateString()}
+                          創建於: {new Date(folder.created_at).toLocaleDateString('zh-TW')}
                         </p>
+                        <div className="mt-3 pt-3 border-t flex justify-end">
+                          <Button variant="destructive" size="sm">
+                            刪除
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}

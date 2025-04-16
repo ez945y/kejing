@@ -1,5 +1,6 @@
 // 管理员API服务
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+console.log('使用的API地址:', API_URL); // 调试用
 
 // 类型定义
 export interface LoginCredentials {
@@ -52,17 +53,28 @@ export interface Image {
   updated_at: string;
 }
 
+// 以下是辅助函数，用于构建完整的API URL
+const buildApiUrl = (path: string): string => {
+  const baseUrl = API_URL.replace(/\/$/, '');
+  return `${baseUrl}${path}`;
+};
+
 // 管理员登录
 export const adminLogin = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
+    console.log('开始登录请求');
+    // 确保API_URL存在且末尾没有斜杠
+    const baseUrl = API_URL.replace(/\/$/, '');
+    const url = `${baseUrl}/api/auth/token`;
+    
+    console.log('登录请求URL:', url); // 调试用
+    
     // 将凭据转换为表单数据格式
     const formData = new URLSearchParams();
     formData.append('username', credentials.username);
     formData.append('password', credentials.password);
-    console.log(`${API_URL}`);
-    console.log(`${API_URL}/api/auth/token`);
 
-    const response = await fetch(`${API_URL}/api/auth/token`, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -75,7 +87,13 @@ export const adminLogin = async (credentials: LoginCredentials): Promise<AuthRes
       throw new Error(errorData.detail || '登录失败');
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log('登录成功');
+    
+    // 存储用户名便于后续使用
+    localStorage.setItem('admin_username', credentials.username);
+    
+    return data;
   } catch (error) {
     console.error('登录失败:', error);
     throw error;
@@ -85,7 +103,7 @@ export const adminLogin = async (credentials: LoginCredentials): Promise<AuthRes
 // 获取当前登录的管理员信息
 export const getCurrentAdmin = async (token: string): Promise<AdminUser> => {
   try {
-    const response = await fetch(`${API_URL}/api/auth/me`, {
+    const response = await fetch(buildApiUrl('/api/auth/me'), {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -105,7 +123,7 @@ export const getCurrentAdmin = async (token: string): Promise<AdminUser> => {
 // 获取所有文件夹
 export const fetchFolders = async (token: string): Promise<Folder[]> => {
   try {
-    const response = await fetch(`${API_URL}/api/admin/folders`, {
+    const response = await fetch(buildApiUrl('/api/admin/folders'), {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -125,7 +143,7 @@ export const fetchFolders = async (token: string): Promise<Folder[]> => {
 // 创建文件夹
 export const createFolder = async (token: string, folder: FolderCreate): Promise<Folder> => {
   try {
-    const response = await fetch(`${API_URL}/api/admin/folders`, {
+    const response = await fetch(buildApiUrl('/api/admin/folders'), {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -148,7 +166,7 @@ export const createFolder = async (token: string, folder: FolderCreate): Promise
 // 删除文件夹
 export const deleteFolder = async (token: string, folderId: number): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_URL}/api/admin/folders/${folderId}`, {
+    const response = await fetch(buildApiUrl(`/api/admin/folders/${folderId}`), {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -169,7 +187,7 @@ export const deleteFolder = async (token: string, folderId: number): Promise<boo
 // 获取所有相册（管理员视图）
 export const fetchAdminAlbums = async (token: string): Promise<Album[]> => {
   try {
-    const response = await fetch(`${API_URL}/api/admin/albums`, {
+    const response = await fetch(buildApiUrl('/api/admin/albums'), {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -189,7 +207,7 @@ export const fetchAdminAlbums = async (token: string): Promise<Album[]> => {
 // 创建相册
 export const createAlbum = async (token: string, album: AlbumCreate): Promise<Album> => {
   try {
-    const response = await fetch(`${API_URL}/api/admin/albums`, {
+    const response = await fetch(buildApiUrl('/api/admin/albums'), {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -212,7 +230,7 @@ export const createAlbum = async (token: string, album: AlbumCreate): Promise<Al
 // 删除相册
 export const deleteAlbum = async (token: string, albumId: number): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_URL}/api/admin/albums/${albumId}`, {
+    const response = await fetch(buildApiUrl(`/api/admin/albums/${albumId}`), {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -237,7 +255,7 @@ export const uploadImage = async (token: string, albumId: number, file: File): P
     formData.append('album_id', albumId.toString());
     formData.append('file', file);
 
-    const response = await fetch(`${API_URL}/api/admin/upload`, {
+    const response = await fetch(buildApiUrl('/api/admin/upload'), {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -259,7 +277,7 @@ export const uploadImage = async (token: string, albumId: number, file: File): P
 // 删除图片
 export const deleteImage = async (token: string, imageId: number): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_URL}/api/admin/images/${imageId}`, {
+    const response = await fetch(buildApiUrl(`/api/admin/images/${imageId}`), {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,

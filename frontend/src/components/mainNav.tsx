@@ -8,7 +8,7 @@ function MainNav() {
 
   const menus = [
     { title: "服務項目", path: "/services" },
-    { title: "案例介紹", path: "/cases" },
+    { title: "案例介紹", path: "/gallery" },
     { title: "聯絡我們", path: "/contact" },
   ];
 

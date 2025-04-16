@@ -31,7 +31,7 @@ export default function AdminLoginPage() {
       // 跳转到管理面板
       router.push('/admin/dashboard');
     } catch (error: any) {
-      setError(error.message || '登录失败，请检查用户名和密码');
+      setError(error.message || '登錄失敗，請檢查用戶名和密碼');
     } finally {
       setLoading(false);
     }
@@ -41,9 +41,9 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">管理员登录</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">管理員登錄</CardTitle>
           <CardDescription className="text-center">
-            请输入管理员凭据登录
+            請輸入管理員憑據登錄
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
@@ -55,17 +55,17 @@ export default function AdminLoginPage() {
               </Alert>
             )}
             <div className="space-y-2">
-              <Label htmlFor="username">用户名</Label>
+              <Label htmlFor="username">用戶名</Label>
               <Input
                 id="username"
-                placeholder="管理员用户名"
+                placeholder="管理員用戶名"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">密码</Label>
+              <Label htmlFor="password">密碼</Label>
               <Input
                 id="password"
                 type="password"
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
               className="w-full" 
               disabled={loading}
             >
-              {loading ? '登录中...' : '登录'}
+              {loading ? '登錄中...' : '登錄'}
             </Button>
           </CardFooter>
         </form>

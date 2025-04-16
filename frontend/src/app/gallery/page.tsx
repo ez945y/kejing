@@ -7,7 +7,6 @@ import { fetchAllAlbumsWithImages, Album, Image as ImageType } from '@/app/api/g
 import Link from 'next/link';
 import MainNav from '@/components/mainNav';
 import MainFooter from '@/components/mainFooter';
-import { Button } from "@/components/ui/button";
 
 export default function GalleryPage() {
   const [activeTab, setActiveTab] = useState<string>('business');
@@ -50,8 +49,8 @@ export default function GalleryPage() {
     if (albums.length === 0) {
       return (
         <div className="text-center py-20">
-          <h3 className="text-xl font-medium">暂无相册</h3>
-          <p className="text-gray-500 mt-2">当前分类下没有相册，请稍后再试。</p>
+          <h3 className="text-xl font-medium">暫無相簿</h3>
+          <p className="text-gray-500 mt-2">當前分類下沒有相簿，請稍後再試。</p>
         </div>
       );
     }
@@ -72,13 +71,13 @@ export default function GalleryPage() {
                 </div>
               ) : (
                 <div className="bg-gray-200 h-[200px] flex items-center justify-center">
-                  <p className="text-gray-500">无图片</p>
+                  <p className="text-gray-500">無圖片</p>
                 </div>
               )}
               <div className="p-4">
                 <h3 className="text-lg font-medium">{album.album_name}</h3>
                 <p className="text-sm text-gray-500">
-                  {album.images ? `${album.images.length} 张图片` : '0 张图片'}
+                  {album.images ? `${album.images.length} 張圖片` : '0 張圖片'}
                 </p>
               </div>
             </div>
@@ -91,8 +90,8 @@ export default function GalleryPage() {
   return (
     <>
       <MainNav />
-      <main className="container mx-auto py-12 px-4">
-        <h1 className="text-4xl font-bold text-center mb-8">精选作品集</h1>
+      <main className="container mt-10 mx-auto py-12 px-4">
+        <h1 className="text-4xl font-bold text-center mb-8">精選作品集</h1>
         
         <Tabs 
           defaultValue="business" 

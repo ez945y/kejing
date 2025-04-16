@@ -14,12 +14,12 @@ export default function AdminNav() {
     router.push('/admin/login');
   };
 
-  // 导航项目
+  // 導航項目
   const navItems = [
-    { href: '/admin/dashboard', label: '仪表盘' },
-    { href: '/admin/upload', label: '内容管理' },
-    { href: '/admin/cases', label: '案例管理' },
-    { href: '/admin/services', label: '服务管理' },
+    { href: '/admin/dashboard', label: '儀表板' },
+    { href: '/admin/upload', label: '案例管理' },
+    { href: '/admin/cases', label: '作品集管理' },
+    { href: '/admin/services', label: '服務管理' },
   ];
 
   return (
@@ -29,7 +29,7 @@ export default function AdminNav() {
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <Link href="/admin/dashboard" className="font-bold text-lg">
-                管理后台
+                管理後台
               </Link>
             </div>
             <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
@@ -54,7 +54,7 @@ export default function AdminNav() {
               onClick={handleLogout}
               className="text-gray-500 hover:text-gray-700"
             >
-              退出登录
+              退出登錄
             </Button>
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
@@ -69,7 +69,7 @@ export default function AdminNav() {
         </div>
       </div>
 
-      {/* 移动端导航菜单 */}
+      {/* 移動端導航菜單 */}
       <div className="sm:hidden">
         <div className="pt-2 pb-3 space-y-1">
           {navItems.map((item) => (
