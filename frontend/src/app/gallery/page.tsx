@@ -2,102 +2,54 @@
 
 import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent } from "@/components/ui/card";
 import Image from 'next/image';
 import { fetchAllAlbumsWithImages, Album, Image as ImageType } from '@/app/api/galleryService';
 import Link from 'next/link';
 import MainNav from '@/components/mainNav';
 import MainFooter from '@/components/mainFooter';
+import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState } from '@/components/ui/emptyState';
+import { FileQuestion } from 'lucide-react';
 
 export default function GalleryPage() {
   const [activeTab, setActiveTab] = useState<string>('business');
   const [albums, setAlbums] = useState<Album[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchAlbums = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchAllAlbumsWithImages(activeTab);
-        setAlbums(data);
-      } catch (error) {
-        console.error('Error fetching albums:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchAlbums = async (label?: string) => {
+    setLoading(true);
+    try {
+      console.log('正在获取相册，标签:', label);
+      const albumsData = await fetchAllAlbumsWithImages(label);
+      console.log('获取到的相册数据:', albumsData);
+      setAlbums(albumsData);
+    } catch (error) {
+      console.error('获取相册失败:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchAlbums();
+  useEffect(() => {
+    fetchAlbums(activeTab);
   }, [activeTab]);
 
-  const renderAlbumCards = () => {
-    if (loading) {
-      return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, index) => (
-            <div key={index} className="rounded-lg overflow-hidden border border-gray-200">
-              <div className="h-[200px] w-full bg-gray-200 animate-pulse"></div>
-              <div className="p-4">
-                <div className="h-5 w-3/4 mb-2 bg-gray-200 animate-pulse"></div>
-                <div className="h-4 w-1/2 bg-gray-200 animate-pulse"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    if (albums.length === 0) {
-      return (
-        <div className="text-center py-20">
-          <h3 className="text-xl font-medium">暫無相簿</h3>
-          <p className="text-gray-500 mt-2">當前分類下沒有相簿，請稍後再試。</p>
-        </div>
-      );
-    }
-
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {albums.map((album) => (
-          <Link key={album.id} href={`/gallery/${album.id}`}>
-            <div className="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-300">
-              {album.images && album.images.length > 0 ? (
-                <div className="relative h-[200px]">
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/api/images/${album.images[0].id}/file`}
-                    alt={album.album_name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="bg-gray-200 h-[200px] flex items-center justify-center">
-                  <p className="text-gray-500">無圖片</p>
-                </div>
-              )}
-              <div className="p-4">
-                <h3 className="text-lg font-medium">{album.album_name}</h3>
-                <p className="text-sm text-gray-500">
-                  {album.images ? `${album.images.length} 張圖片` : '0 張圖片'}
-                </p>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    );
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
   };
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <MainNav />
-      <main className="container mt-10 mx-auto py-12 px-4">
-        <h1 className="text-4xl font-bold text-center mb-8">精選作品集</h1>
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-center mb-8">精選作品集</h1>
         
         <Tabs 
           defaultValue="business" 
           value={activeTab}
-          onValueChange={setActiveTab}
-          className="w-full max-w-2xl mx-auto mb-12"
+          onValueChange={handleTabChange}
+          className="w-full max-w-2xl mx-auto mb-8"
         >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="business">商業空間</TabsTrigger>
@@ -105,9 +57,55 @@ export default function GalleryPage() {
           </TabsList>
         </Tabs>
 
-        {renderAlbumCards()}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, index) => (
+              <Card key={index} className="overflow-hidden">
+                <div className="h-48 bg-gray-200 animate-pulse"></div>
+                <CardContent className="p-4">
+                  <div className="h-5 bg-gray-200 animate-pulse w-2/3 mb-2"></div>
+                  <div className="h-4 bg-gray-200 animate-pulse w-1/2"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : albums.length === 0 ? (
+          <EmptyState 
+            icon={FileQuestion}
+            title="暫無相簿" 
+            description="當前分類下沒有相簿，請稍後再試。" 
+          />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {albums.map((album) => (
+              <Link href={`/gallery/${album.id}`} key={album.id}>
+                <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
+                  <div className="h-48 relative overflow-hidden">
+                    {album.images && album.images.length > 0 ? (
+                      <div className="h-full w-full relative">
+                        <img
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/${album.images[0].object_name}`}
+                          alt={album.album_name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <p className="text-gray-500">暫無圖片</p>
+                      </div>
+                    )}
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-medium text-lg">{album.album_name}</h3>
+                    <p className="text-sm text-gray-500">{album.images?.length || 0} 張圖片</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
       </main>
       <MainFooter />
-    </>
+    </div>
   );
 } 
