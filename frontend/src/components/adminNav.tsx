@@ -17,10 +17,9 @@ export default function AdminNav() {
   // 導航項目
   const navItems = [
     { href: '/admin/dashboard', label: '儀表板' },
-    { href: '/admin/upload', label: '案例管理' },
-    { href: '/admin/cases', label: '作品集管理' },
+    { href: '/admin/albums', label: '案例管理' },
     { href: '/admin/services', label: '服務管理' },
-    { href: '/admin/messages', label: '聯繫消息' },
+    { href: '/admin/messages', label: '用戶消息' },
   ];
 
   return (
