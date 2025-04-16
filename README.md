@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 可京室內裝修
 
-## Getting Started
+專業室內設計與裝修服務網站
 
-First, run the development server:
+## 專案結構
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+kejing/
+├── frontend/         # Next.js 前端項目
+│   ├── src/          # 前端源代碼
+│   ├── public/       # 靜態資源
+│   └── ...
+├── backend/          # FastAPI 後端項目
+│   ├── app/          # 後端應用代碼
+│   │   ├── models.py # 數據模型
+│   │   └── routes.py # API路由
+│   ├── main.py       # 入口文件
+│   └── ...
+└── ...
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 技術棧
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **前端**：Next.js, React, Tailwind CSS
+- **後端**：FastAPI, Python
+- **工具**：TypeScript, ESLint
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 開發環境設置
 
-## Learn More
+### 前置條件
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18+
+- Python 3.8+
+- npm 或 yarn
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 安裝依賴
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+# 安裝項目所有依賴
+npm run setup
+```
 
-## Deploy on Vercel
+### 運行開發環境
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# 同時運行前端和後端
+npm run dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# 僅運行前端
+npm run dev:frontend
+
+# 僅運行後端
+npm run dev:backend
+```
+
+### 構建和部署
+
+```bash
+# 構建前端
+npm run build
+
+# 啟動生產環境
+npm run start
+```
+
+## API文檔
+
+啟動後端服務後，訪問以下地址查看API文檔：
+
+```
+http://localhost:8000/docs
+```
+
+## 功能特點
+
+- 響應式設計，適配各種設備
+- 現代化UI界面
+- 案例展示
+- 服務介紹
+- 聯繫表單
+- 專業FAQ問答
