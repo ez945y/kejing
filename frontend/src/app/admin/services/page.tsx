@@ -48,7 +48,9 @@ export default function ServicesPage() {
     try {
       setIsLoading(true);
       const token = localStorage.getItem('admin_token');
-      const response = await fetch(`${API_URL}/api/services`, {
+      // 添加時間戳參數避免緩存問題
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${API_URL}/api/services?t=${timestamp}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -56,6 +58,7 @@ export default function ServicesPage() {
       
       if (response.ok) {
         const data = await response.json();
+        console.log('管理員頁面獲取的服務數據:', data); // 添加日誌以便調試
         setServices(data);
       } else {
         console.error('獲取服務失敗');
@@ -529,4 +532,4 @@ export default function ServicesPage() {
       )}
     </div>
   );
-} 
+}

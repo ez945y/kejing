@@ -46,7 +46,7 @@ function Main() {
           <div className="mt-12 lg:mt-0 lg:w-1/2 relative">
             <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
               <Image
-                src="/images/mike.png"
+                src="/images/2.jpg"
                 alt="室內設計展示"
                 fill
                 style={{ objectFit: "cover" }}
@@ -67,7 +67,7 @@ function Main() {
             <div className="lg:w-1/2 relative">
               <div className="relative w-full h-[400px] overflow-hidden rounded-xl shadow-xl">
                 <Image
-                  src="/images/dragon.png"
+                  src="/images/1.jpg"
                   alt="專業團隊"
                   fill
                   style={{ objectFit: "cover" }}

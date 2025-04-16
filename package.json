@@ -3,12 +3,13 @@
     "version": "1.0.0",
     "description": "可京室内装修项目",
     "scripts": {
-      "frontend": "cd frontend && npm run dev",
-      "backend": "cd backend && source venv/bin/activate && uvicorn main:app --reload --port 5568",
-      "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
-      "setup": "cp .env ./frontend/.env.local"
+        "frontend": "cd frontend && npm run dev",
+        "backend": "cd backend && source venv/bin/activate && uvicorn main:app --reload --port 5568",
+        "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+        "setup": "cp .env ./frontend/.env.local"
     },
     "dependencies": {
-      "concurrently": "^8.2.2"
+        "concurrently": "^8.2.2",
+        "framer-motion": "^12.7.3"
     }
-  }
+}

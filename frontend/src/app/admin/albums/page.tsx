@@ -136,7 +136,7 @@ export default function AlbumsPage() {
               <p className="mt-2 text-gray-600">創建和管理相冊，上傳和整理圖片。</p>
             </div>
             <div className="flex space-x-3">
-              <Link href="/admin/albums/new/upload">
+              <Link href="/admin/albums/new">
                 <div className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
                   <Upload className="w-4 h-4 mr-2" />
                   快速創建並上傳
@@ -188,16 +188,10 @@ export default function AlbumsPage() {
               <h3 className="text-lg font-medium text-gray-900 mb-2">沒有相冊</h3>
               <p className="text-gray-600 mb-6">還沒有創建任何相冊，點擊下方按鈕創建第一個相冊。</p>
               <div className="flex justify-center space-x-4">
-                <Link href="/admin/albums/new/upload">
+                <Link href="/admin/albums/new">
                   <div className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
                     <Upload className="w-4 h-4 mr-2" />
                     快速創建並上傳
-                  </div>
-                </Link>
-                <Link href="/admin/albums/new">
-                  <div className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                    <PlusCircle className="w-4 h-4 mr-2" />
-                    創建新相冊
                   </div>
                 </Link>
               </div>
@@ -291,7 +285,7 @@ export default function AlbumsPage() {
       
       {/* 右下角固定按钮 */}
       <div className="fixed bottom-6 right-6 flex flex-col space-y-3">
-        <Link href="/admin/albums/new/upload">
+        <Link href="/admin/albums/new">
           <div className="w-14 h-14 bg-green-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-green-700 transition-colors" title="快速創建並上傳">
             <Upload className="w-6 h-6" />
           </div>

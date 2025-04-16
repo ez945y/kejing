@@ -6,16 +6,21 @@ export interface Service {
   id: number;
   name: string;
   description: string;
+  icon?: string | null;
 }
 
 // 获取所有服务
 export const fetchAllServices = async (): Promise<Service[]> => {
   try {
-    const response = await fetch(`${API_URL}/api/services`);
+    // 添加时间戳参数，确保每次请求都是最新的数据，避免缓存问题
+    const timestamp = new Date().getTime();
+    const response = await fetch(`${API_URL}/api/services?t=${timestamp}`);
     if (!response.ok) {
       throw new Error('获取服务失败');
     }
-    return await response.json();
+    const data = await response.json();
+    console.log('API返回的服务数据:', data); // 添加日志，查看API实际返回的数据
+    return data;
   } catch (error) {
     console.error('获取服务出错:', error);
     return [];

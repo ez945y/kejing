@@ -11,54 +11,6 @@ from fastapi.responses import FileResponse
 
 router = APIRouter()
 
-# 示例数据 - 在实际项目中应该从数据库获取
-cases = [
-    {
-        "id": 1,
-        "title": "現代簡約風格公寓",
-        "description": "60平方米的小公寓，採用現代簡約風格設計，充分利用空間。",
-        "image": "/images/case1.jpg",
-        "date": "2023-01-15"
-    },
-    {
-        "id": 2,
-        "title": "日式風格別墅",
-        "description": "180平方米的別墅，採用日式風格設計，注重自然材料與空間層次。",
-        "image": "/images/case2.jpg",
-        "date": "2023-03-20"
-    },
-    {
-        "id": 3,
-        "title": "北歐風格家居",
-        "description": "120平方米的三居室，北歐風格裝修，簡潔明亮。",
-        "image": "/images/case3.jpg",
-        "date": "2023-05-10"
-    }
-]
-
-services = [
-    {
-        "id": 1,
-        "name": "專業設計",
-        "description": "客製化空間規劃，根據您的需求打造理想家居。"
-    },
-    {
-        "id": 2,
-        "name": "精緻施工",
-        "description": "高品質裝修工程，自有施工團隊確保工程品質。"
-    },
-    {
-        "id": 3,
-        "name": "全屋翻新",
-        "description": "舊屋改造煥然一新，讓陳舊空間重獲新生。"
-    },
-    {
-        "id": 4,
-        "name": "智能家居",
-        "description": "現代化智慧空間，提升居住體驗與便利性。"
-    }
-]
-
 # 文件夹相关路由
 @router.get("/folders", response_model=List[schemas.Folder])
 async def get_folders(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -208,27 +160,12 @@ async def delete_image(image_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="图片不存在")
     return True
 
-# 案例相关路由
-@router.get("/cases", response_model=List[schemas.Case])
-async def get_cases(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    cases = crud.get_cases(db, skip=skip, limit=limit)
-    return cases
-
-@router.get("/cases/{case_id}", response_model=schemas.Case)
-async def get_case(case_id: int, db: Session = Depends(get_db)):
-    db_case = crud.get_case(db, case_id=case_id)
-    if db_case is None:
-        raise HTTPException(status_code=404, detail="案例不存在")
-    return db_case
-
-@router.post("/cases", response_model=schemas.Case)
-async def create_case(case: schemas.CaseCreate, db: Session = Depends(get_db)):
-    return crud.create_case(db=db, case=case)
-
 # 服务相关路由
 @router.get("/services", response_model=List[schemas.Service])
 async def get_services(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     services = crud.get_services(db, skip=skip, limit=limit)
+    # 添加日志以便调试
+    print(f"从数据库获取服务列表: {services}")
     return services
 
 @router.get("/services/{service_id}", response_model=schemas.Service)
@@ -240,10 +177,16 @@ async def get_service(service_id: int, db: Session = Depends(get_db)):
 
 @router.post("/services", response_model=schemas.Service)
 async def create_service(service: schemas.ServiceCreate, db: Session = Depends(get_db)):
-    return crud.create_service(db=db, service=service)
+    # 添加日志以便调试
+    print(f"创建新服务: {service}")
+    new_service = crud.create_service(db=db, service=service)
+    print(f"创建的服务数据: {new_service}")
+    return new_service
 
 @router.put("/services/{service_id}", response_model=schemas.Service)
 async def update_service(service_id: int, service: schemas.ServiceUpdate, db: Session = Depends(get_db)):
+    # 添加日志以便调试
+    print(f"更新服务 {service_id}: {service}")
     db_service = crud.update_service(db, service_id=service_id, service=service)
     if db_service is None:
         raise HTTPException(status_code=404, detail="服务不存在")
@@ -251,6 +194,8 @@ async def update_service(service_id: int, service: schemas.ServiceUpdate, db: Se
 
 @router.delete("/services/{service_id}", response_model=bool)
 async def delete_service(service_id: int, db: Session = Depends(get_db)):
+    # 添加日志以便调试
+    print(f"删除服务 {service_id}")
     result = crud.delete_service(db, service_id=service_id)
     if not result:
         raise HTTPException(status_code=404, detail="服务不存在")
