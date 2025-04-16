@@ -199,25 +199,30 @@ export default function AlbumsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {albums.map((album) => (
-                <div key={album.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="h-40 bg-gray-200 relative">
+                <div key={album.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 group relative">
+                  <Link href={`/admin/albums/${album.id}`} className="block absolute inset-0 z-10">
+                    <span className="sr-only">查看相冊 {album.album_name}</span>
+                  </Link>
+                  
+                  <div className="h-40 bg-gray-200 relative overflow-hidden group-hover:brightness-105 transition-all duration-300">
                     {album.cover_image ? (
                       <img 
                         src={`${API_URL}/api/images/${album.cover_image}/file`} 
                         alt={album.album_name} 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <Image className="w-12 h-12 text-gray-400" />
                       </div>
                     )}
-                    <span className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full ${
+                    <span className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full z-20 ${
                       album.label === 'business' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
                     }`}>
                       {album.label === 'business' ? '商業案例' : '住宅案例'}
                     </span>
                   </div>
+                  
                   <div className="p-4">
                     <h3 className="text-lg font-medium text-gray-900 mb-1">{album.album_name}</h3>
                     <p className="text-gray-600 text-sm mb-3 line-clamp-2">
@@ -227,19 +232,22 @@ export default function AlbumsPage() {
                       <span className="text-xs text-gray-500">
                         創建於 {formatDate(album.created_at)}
                       </span>
-                      <div className="flex space-x-2">
-                        <Link href={`/admin/albums/${album.id}`}>
-                          <div className="p-1 rounded-full hover:bg-gray-100">
-                            <Images className="w-5 h-5 text-gray-600" />
-                          </div>
-                        </Link>
-                        <Link href={`/admin/albums/${album.id}/edit`}>
-                          <div className="p-1 rounded-full hover:bg-gray-100">
-                            <Pencil className="w-5 h-5 text-gray-600" />
-                          </div>
-                        </Link>
+                      <div className="flex space-x-2 relative z-20">
                         <button 
-                          onClick={() => handleDeleteClick(album)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            router.push(`/admin/albums/${album.id}`);
+                          }}
+                          className="p-1 rounded-full hover:bg-gray-100"
+                        >
+                          <Images className="w-5 h-5 text-gray-600" />
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDeleteClick(album);
+                          }}
                           className="p-1 rounded-full hover:bg-gray-100"
                         >
                           <Trash2 className="w-5 h-5 text-gray-600" />
