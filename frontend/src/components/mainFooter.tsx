@@ -11,20 +11,6 @@ const MainFooter = () => {
       <footer className="py-6 text-gray-900 w-full" >
         <div className="container px-6 mx-auto space-y-6 divide-y divide-gray-400 md:space-y-12 divide-opacity-50">
           <div className="flex items-center justify-between">
-            <div className="col-span-full md:pb-0 md:col-span-6">
-              <Link
-               
-                href="/"
-                className="flex justify-center space-x-3 md:justify-start"
-              >
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-rose-600 text-white">
-                  <Flower2 />
-                </div>
-                <span className="self-center text-2xl font-semibold">
-                  Inators UI
-                </span>
-              </Link>
-            </div>
             <div className="flex justify-center space-x-4 lg:pt-0 lg:col-end-13">
               <a
                

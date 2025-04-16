@@ -24,7 +24,7 @@ export const fetchGalleries = async () => {
   };
   
   export const deleteAlbum = async (title:string) => {
-    if (window.confirm("你確定要刪除這本相簿嗎?")) {
+    if (window.confirm("你確定要刪除這本相冊嗎?")) {
       const response = await fetch(`http://127.0.0.1:5568/api/gallery/${title}`, {
         method: 'DELETE',
       });

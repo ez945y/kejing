@@ -11,7 +11,10 @@ import {
   Info, 
   XCircle, 
   CheckCircle,
-  Loader2
+  Loader2,
+  X,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -44,6 +47,8 @@ export default function AlbumDetailPage() {
   const [uploadMessage, setUploadMessage] = useState('');
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const params = useParams();
@@ -61,6 +66,31 @@ export default function AlbumDetailPage() {
 
     fetchAlbumDetails();
   }, [router, albumId]);
+
+  // 添加键盘事件监听
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+      
+      switch (e.key) {
+        case 'ArrowLeft':
+          handlePrevImage();
+          break;
+        case 'ArrowRight':
+          handleNextImage();
+          break;
+        case 'Escape':
+          setLightboxOpen(false);
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [lightboxOpen, currentImageIndex, images.length]);
 
   const fetchAlbumDetails = async () => {
     try {
@@ -225,6 +255,23 @@ export default function AlbumDetailPage() {
     });
   };
 
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -260,38 +307,39 @@ export default function AlbumDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       <AdminNav />
       
       <div className="pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           {/* 标题和导航 */}
           <div className="mb-8">
-            <div className="flex items-center mb-4">
-              <Link href="/admin/albums">
-                <div className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  返回相册列表
-                </div>
-              </Link>
-            </div>
-            <div className="flex justify-between items-center">
+            <Link href="/admin/albums">
+              <div className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors mb-6 bg-white px-4 py-2 rounded-full shadow-sm">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                返回相册列表
+              </div>
+            </Link>
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center bg-white p-6 rounded-xl shadow-sm">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">{album.album_name}</h1>
-                <p className="mt-2 text-gray-600">
-                  {album.label === 'business' ? '商业案例' : '住宅案例'} · 創建於 {formatDate(album.created_at)}
-                </p>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{album.album_name}</h1>
+                <div className="flex items-center mb-2">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2">
+                    {album.label === 'business' ? '商业案例' : '住宅案例'}
+                  </span>
+                  <span className="text-gray-500 text-sm">創建於 {formatDate(album.created_at)}</span>
+                </div>
                 {album.description && (
-                  <p className="mt-2 text-gray-700">
+                  <p className="mt-2 text-gray-700 max-w-2xl">
                     {album.description}
                   </p>
                 )}
               </div>
               <button
                 onClick={handleUploadClick}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="mt-4 md:mt-0 inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
               >
-                <Upload className="w-4 h-4 mr-2" />
+                <Upload className="w-5 h-5 mr-2" />
                 上傳圖片
               </button>
               <input
@@ -308,7 +356,7 @@ export default function AlbumDetailPage() {
           {/* 上传状态消息 */}
           {uploadStatus && (
             <div className={`mb-6 p-4 rounded-lg flex items-center ${
-              uploadStatus === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+              uploadStatus === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
             }`}>
               {uploadStatus === 'success' ? (
                 <CheckCircle className="w-5 h-5 mr-2" />
@@ -321,7 +369,7 @@ export default function AlbumDetailPage() {
           
           {/* 图片上传中状态 */}
           {isUploading && (
-            <div className="mb-6 p-4 bg-blue-50 text-blue-800 rounded-lg flex items-center">
+            <div className="mb-6 p-4 bg-blue-50 text-blue-800 rounded-lg flex items-center border border-blue-200">
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
               正在上传图片，请稍候...
             </div>
@@ -329,40 +377,41 @@ export default function AlbumDetailPage() {
           
           {/* 图片列表 */}
           {images.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+            <div className="bg-white rounded-xl shadow-sm p-10 text-center border border-gray-100">
               <div className="flex justify-center mb-4">
-                <Upload className="h-16 w-16 text-gray-400" />
+                <Upload className="h-20 w-20 text-gray-300" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">相册中没有图片</h3>
-              <p className="text-gray-600 mb-6">点击上传按钮添加第一张图片到这个相册。</p>
+              <h3 className="text-xl font-medium text-gray-900 mb-2">相册中没有图片</h3>
+              <p className="text-gray-600 mb-6 max-w-md mx-auto">点击上传按钮添加第一张图片到这个相册。</p>
               <button
                 onClick={handleUploadClick}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
               >
-                <Plus className="w-4 h-4 mr-2" />
+                <Plus className="w-5 h-5 mr-2" />
                 上传图片
               </button>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {images.map((image) => (
+              {images.map((image, index) => (
                 <div 
                   key={image.id} 
-                  className={`bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group 
+                  className={`bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 group 
                     ${String(album.cover_image) === String(image.id) ? 'ring-2 ring-blue-500' : ''}`}
                 >
-                  <div className="h-48 bg-gray-200 relative">
+                  <div className="h-56 bg-gray-200 relative overflow-hidden">
                     <img 
                       src={`${API_URL}/api/images/${image.id}/file`}
                       alt={image.image_name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover cursor-pointer transform group-hover:scale-105 transition-transform duration-300"
+                      onClick={() => openLightbox(index)}
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-3">
                         {String(album.cover_image) !== String(image.id) && (
                           <button
                             onClick={() => handleSetCoverImage(image.id)}
-                            className="p-2 bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors"
+                            className="p-2 bg-blue-600 bg-opacity-90 rounded-full text-white hover:bg-blue-700 transition-colors transform hover:scale-110"
                             title="设为封面"
                           >
                             <Info className="w-5 h-5" />
@@ -370,7 +419,7 @@ export default function AlbumDetailPage() {
                         )}
                         <button
                           onClick={() => handleDeleteClick(image.id)}
-                          className="p-2 bg-red-600 rounded-full text-white hover:bg-red-700 transition-colors"
+                          className="p-2 bg-red-600 bg-opacity-90 rounded-full text-white hover:bg-red-700 transition-colors transform hover:scale-110"
                           title="删除图片"
                         >
                           <Trash2 className="w-5 h-5" />
@@ -378,7 +427,7 @@ export default function AlbumDetailPage() {
                       </div>
                     </div>
                     {String(album.cover_image) === String(image.id) && (
-                      <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-md">
+                      <div className="absolute top-3 left-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-full shadow-sm">
                         封面图片
                       </div>
                     )}
@@ -401,21 +450,21 @@ export default function AlbumDetailPage() {
       {/* 删除确认对话框 */}
       {deleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">确认删除</h3>
+          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-lg">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">确认删除</h3>
             <p className="text-gray-600 mb-6">
               您确定要删除这张图片吗？此操作无法撤销。
             </p>
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setDeleteModalOpen(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
               >
                 取消
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 删除
               </button>
@@ -424,13 +473,52 @@ export default function AlbumDetailPage() {
         </div>
       )}
       
+      {/* 灯箱组件 */}
+      {lightboxOpen && images.length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center">
+          <button 
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors bg-black bg-opacity-50 p-2 rounded-full"
+            onClick={() => setLightboxOpen(false)}
+          >
+            <X className="w-6 h-6" />
+          </button>
+          
+          <button 
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors bg-black bg-opacity-50 p-3 rounded-full hover:bg-opacity-70"
+            onClick={handlePrevImage}
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+          
+          <div className="max-w-5xl max-h-[80vh] w-full h-full flex items-center justify-center p-4">
+            <img 
+              src={`${API_URL}/api/images/${images[currentImageIndex].id}/file`}
+              alt={images[currentImageIndex].image_name}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+          
+          <button 
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors bg-black bg-opacity-50 p-3 rounded-full hover:bg-opacity-70"
+            onClick={handleNextImage}
+          >
+            <ChevronRight className="w-8 h-8" />
+          </button>
+          
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white bg-black bg-opacity-50 px-4 py-2 rounded-full">
+            <p className="text-center mb-1">{images[currentImageIndex].image_name}</p>
+            <p className="text-sm opacity-80">{currentImageIndex + 1} / {images.length}</p>
+          </div>
+        </div>
+      )}
+      
       {/* 右下角固定上传按钮 */}
       <div className="fixed bottom-6 right-6">
         <button
           onClick={handleUploadClick}
-          className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-blue-700 transition-colors"
+          className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-blue-700 transition-colors transform hover:scale-105"
         >
-          <Upload className="w-6 h-6" />
+          <Upload className="w-7 h-7" />
         </button>
       </div>
     </div>

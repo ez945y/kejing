@@ -74,8 +74,8 @@ const Page = () => {
       <Card  className="mt-6">
         <CardHeader>
         <div className="flex items-center justify-center" >
-          <CardTitle> 相簿 </CardTitle>
-          <Button onClick={() => setShowUpload(true)} className="ml-24">上傳相簿</Button>
+          <CardTitle> 相冊 </CardTitle>
+          <Button onClick={() => setShowUpload(true)} className="ml-24">上傳相冊</Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -90,10 +90,10 @@ const Page = () => {
                         <MenubarTrigger> {index+1}. {album.title} </MenubarTrigger>
                         </MenubarMenu>
                       <MenubarMenu>
-                        <MenubarTrigger onClick={() => handleEditClick(album)}>編輯相簿</MenubarTrigger>
+                        <MenubarTrigger onClick={() => handleEditClick(album)}>編輯相冊</MenubarTrigger>
                         </MenubarMenu>
                         <MenubarMenu>
-                        <MenubarTrigger onClick={() => handleDeleteAlbum(album)}>刪除相簿</MenubarTrigger>
+                        <MenubarTrigger onClick={() => handleDeleteAlbum(album)}>刪除相冊</MenubarTrigger>
                         </MenubarMenu>
                       </Menubar>
                 </div>
@@ -156,11 +156,11 @@ const UploadModal = ({fetchData, setMessage, onClose}: {fetchData: () => void, s
     <div className='overlay'>
     <Card className="card-container">
       <CardHeader>
-        <CardTitle>上傳相簿</CardTitle>
+        <CardTitle>上傳相冊</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit}>
-          <input type="text" value={galleryName} onChange={(e) => setGalleryName(e.target.value)} placeholder="請輸入相簿名稱" />
+          <input type="text" value={galleryName} onChange={(e) => setGalleryName(e.target.value)} placeholder="請輸入相冊名稱" />
           <input type="file" multiple onChange={handleFileChange}  ref={fileInputRef} className="input" />
           <Button className="ml-6" type="button" onClick={handleButtonClick}> {count} </Button>
           <Button className="ml-6" type="submit" disabled={uploading}>

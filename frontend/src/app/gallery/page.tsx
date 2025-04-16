@@ -42,7 +42,7 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <MainNav />
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className="flex-grow container mx-auto mt-12 px-4 py-8">
         <h1 className="text-3xl font-bold text-center mb-8">精選作品集</h1>
         
         <Tabs 
@@ -72,8 +72,8 @@ export default function GalleryPage() {
         ) : albums.length === 0 ? (
           <EmptyState 
             icon={FileQuestion}
-            title="暫無相簿" 
-            description="當前分類下沒有相簿，請稍後再試。" 
+            title="暫無相冊" 
+            description="當前分類下沒有相冊，請稍後再試。" 
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
