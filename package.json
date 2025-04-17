@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "可京室内装修项目",
     "scripts": {
-        "frontend": "cd frontend && npm run dev",
+        "frontend": "cd frontend && npm run start",
         "backend": "cd backend && . venv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 5568",
         "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
         "setup": "cp .env ./frontend/.env.local"

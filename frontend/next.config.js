@@ -2,12 +2,11 @@
 const nextConfig = {
     reactStrictMode: true,
     images: {
-        domains: ['localhost'], // 允许从本地开发服务器加载图片
         remotePatterns: [
             {
                 protocol: 'http',
                 hostname: 'localhost',
-                port: '5568', // 根据您的API端口调整
+                port: '5568',
                 pathname: '/api/images/**',
             },
         ],
