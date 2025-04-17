@@ -268,7 +268,7 @@ export default function AlbumsPage() {
           <div className="bg-white rounded-lg max-w-md w-full p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">確認刪除</h3>
             <p className="text-gray-600 mb-2">
-              您確定要刪除相冊 "{albumToDelete?.album_name}" 嗎？
+              您確定要刪除相冊 &quot;{albumToDelete?.album_name}&quot; 嗎？
             </p>
             <p className="text-red-600 text-sm mb-6">
               警告：刪除相冊將同時刪除其中的所有圖片，此操作無法撤銷。
