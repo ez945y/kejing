@@ -4,7 +4,7 @@
     "description": "可京室内装修项目",
     "scripts": {
         "frontend": "cd frontend && npm run dev",
-        "backend": "cd backend && source venv/bin/activate && uvicorn main:app --reload --port 5568",
+        "backend": "cd backend && source venv/bin/activate && uvicorn main:app --reload --host 0.0.0.0 --port 5568",
         "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
         "setup": "cp .env ./frontend/.env.local"
     },
