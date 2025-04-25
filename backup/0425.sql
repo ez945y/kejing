@@ -17,7 +17,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: labelenum; Type: TYPE; Schema: public; Owner: postgres2
+-- Name: labelenum; Type: TYPE; Schema: public; Owner: postgres
 --
 
 CREATE TYPE public.labelenum AS ENUM (
@@ -26,7 +26,7 @@ CREATE TYPE public.labelenum AS ENUM (
 );
 
 
-ALTER TYPE public.labelenum OWNER TO postgres2;
+ALTER TYPE public.labelenum OWNER TO postgres;
 
 SET default_tablespace = '';
 
