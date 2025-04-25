@@ -33,7 +33,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: albums; Type: TABLE; Schema: public; Owner: postgres2
+-- Name: albums; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.albums (
@@ -47,10 +47,10 @@ CREATE TABLE public.albums (
 );
 
 
-ALTER TABLE public.albums OWNER TO postgres2;
+ALTER TABLE public.albums OWNER TO postgres;
 
 --
--- Name: albums_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres2
+-- Name: albums_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.albums_id_seq
@@ -62,17 +62,17 @@ CREATE SEQUENCE public.albums_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.albums_id_seq OWNER TO postgres2;
+ALTER SEQUENCE public.albums_id_seq OWNER TO postgres;
 
 --
--- Name: albums_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres2
+-- Name: albums_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.albums_id_seq OWNED BY public.albums.id;
 
 
 --
--- Name: contacts; Type: TABLE; Schema: public; Owner: postgres2
+-- Name: contacts; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.contacts (
@@ -86,10 +86,10 @@ CREATE TABLE public.contacts (
 );
 
 
-ALTER TABLE public.contacts OWNER TO postgres2;
+ALTER TABLE public.contacts OWNER TO postgres;
 
 --
--- Name: contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres2
+-- Name: contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.contacts_id_seq
@@ -101,17 +101,17 @@ CREATE SEQUENCE public.contacts_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.contacts_id_seq OWNER TO postgres2;
+ALTER SEQUENCE public.contacts_id_seq OWNER TO postgres;
 
 --
--- Name: contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres2
+-- Name: contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.contacts_id_seq OWNED BY public.contacts.id;
 
 
 --
--- Name: images; Type: TABLE; Schema: public; Owner: postgres2
+-- Name: images; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.images (
@@ -125,10 +125,10 @@ CREATE TABLE public.images (
 );
 
 
-ALTER TABLE public.images OWNER TO postgres2;
+ALTER TABLE public.images OWNER TO postgres;
 
 --
--- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres2
+-- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.images_id_seq
@@ -140,17 +140,17 @@ CREATE SEQUENCE public.images_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.images_id_seq OWNER TO postgres2;
+ALTER SEQUENCE public.images_id_seq OWNER TO postgres;
 
 --
--- Name: images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres2
+-- Name: images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.images_id_seq OWNED BY public.images.id;
 
 
 --
--- Name: services; Type: TABLE; Schema: public; Owner: postgres2
+-- Name: services; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.services (
@@ -164,10 +164,10 @@ CREATE TABLE public.services (
 );
 
 
-ALTER TABLE public.services OWNER TO postgres2;
+ALTER TABLE public.services OWNER TO postgres;
 
 --
--- Name: services_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres2
+-- Name: services_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.services_id_seq
@@ -179,45 +179,45 @@ CREATE SEQUENCE public.services_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.services_id_seq OWNER TO postgres2;
+ALTER SEQUENCE public.services_id_seq OWNER TO postgres;
 
 --
--- Name: services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres2
+-- Name: services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.services_id_seq OWNED BY public.services.id;
 
 
 --
--- Name: albums id; Type: DEFAULT; Schema: public; Owner: postgres2
+-- Name: albums id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.albums ALTER COLUMN id SET DEFAULT nextval('public.albums_id_seq'::regclass);
 
 
 --
--- Name: contacts id; Type: DEFAULT; Schema: public; Owner: postgres2
+-- Name: contacts id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.contacts ALTER COLUMN id SET DEFAULT nextval('public.contacts_id_seq'::regclass);
 
 
 --
--- Name: images id; Type: DEFAULT; Schema: public; Owner: postgres2
+-- Name: images id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.images ALTER COLUMN id SET DEFAULT nextval('public.images_id_seq'::regclass);
 
 
 --
--- Name: services id; Type: DEFAULT; Schema: public; Owner: postgres2
+-- Name: services id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.services ALTER COLUMN id SET DEFAULT nextval('public.services_id_seq'::regclass);
 
 
 --
--- Data for Name: albums; Type: TABLE DATA; Schema: public; Owner: postgres2
+-- Data for Name: albums; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.albums (id, album_name, label, description, cover_image, created_at, updated_at) FROM stdin;
@@ -235,7 +235,7 @@ COPY public.albums (id, album_name, label, description, cover_image, created_at,
 
 
 --
--- Data for Name: contacts; Type: TABLE DATA; Schema: public; Owner: postgres2
+-- Data for Name: contacts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.contacts (id, name, phone, email, message, is_read, created_at) FROM stdin;
@@ -245,7 +245,7 @@ COPY public.contacts (id, name, phone, email, message, is_read, created_at) FROM
 
 
 --
--- Data for Name: images; Type: TABLE DATA; Schema: public; Owner: postgres2
+-- Data for Name: images; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.images (id, image_name, object_name, description, album_id, created_at, updated_at) FROM stdin;
@@ -265,7 +265,7 @@ COPY public.images (id, image_name, object_name, description, album_id, created_
 
 
 --
--- Data for Name: services; Type: TABLE DATA; Schema: public; Owner: postgres2
+-- Data for Name: services; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.services (id, name, description, icon, "order", created_at, updated_at) FROM stdin;
@@ -277,35 +277,35 @@ COPY public.services (id, name, description, icon, "order", created_at, updated_
 
 
 --
--- Name: albums_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres2
+-- Name: albums_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.albums_id_seq', 13, true);
 
 
 --
--- Name: contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres2
+-- Name: contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.contacts_id_seq', 2, true);
 
 
 --
--- Name: images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres2
+-- Name: images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.images_id_seq', 14, true);
 
 
 --
--- Name: services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres2
+-- Name: services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.services_id_seq', 1, true);
 
 
 --
--- Name: albums albums_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres2
+-- Name: albums albums_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.albums
@@ -313,7 +313,7 @@ ALTER TABLE ONLY public.albums
 
 
 --
--- Name: contacts contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres2
+-- Name: contacts contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.contacts
@@ -321,7 +321,7 @@ ALTER TABLE ONLY public.contacts
 
 
 --
--- Name: images images_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres2
+-- Name: images images_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.images
@@ -329,7 +329,7 @@ ALTER TABLE ONLY public.images
 
 
 --
--- Name: services services_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres2
+-- Name: services services_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.services
@@ -337,35 +337,35 @@ ALTER TABLE ONLY public.services
 
 
 --
--- Name: ix_albums_id; Type: INDEX; Schema: public; Owner: postgres2
+-- Name: ix_albums_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE INDEX ix_albums_id ON public.albums USING btree (id);
 
 
 --
--- Name: ix_contacts_id; Type: INDEX; Schema: public; Owner: postgres2
+-- Name: ix_contacts_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE INDEX ix_contacts_id ON public.contacts USING btree (id);
 
 
 --
--- Name: ix_images_id; Type: INDEX; Schema: public; Owner: postgres2
+-- Name: ix_images_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE INDEX ix_images_id ON public.images USING btree (id);
 
 
 --
--- Name: ix_services_id; Type: INDEX; Schema: public; Owner: postgres2
+-- Name: ix_services_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE INDEX ix_services_id ON public.services USING btree (id);
 
 
 --
--- Name: images images_album_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres2
+-- Name: images images_album_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.images
